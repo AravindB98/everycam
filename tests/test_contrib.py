@@ -71,3 +71,20 @@ def test_analyze_dataset(demo_dataset):
     s = analyze_dataset(demo_dataset, train=False)
     assert s["total_frames"] > 0
     assert s["anonymized"] is True
+
+
+def test_aggregate_registry(demo_dataset, tmp_path):
+    from everycam.contrib import aggregate_registry
+
+    reg = str(tmp_path / "registry")
+    card = build_contribution(
+        demo_dataset, id="agg-1", title="t", contributor="me", device="phone",
+        task="x", consent="self", license="CC0-1.0", data_mode="in_repo",
+        registry_dir=reg, attest_rights=True,
+    )
+    register(card, registry_dir=reg)
+    agg = aggregate_registry(reg)
+    assert agg["contributions"] == 1
+    assert agg["total_frames"] > 0
+    assert agg["by_device"].get("phone") == 1
+    assert agg["pooled_contact_ratio"] is not None

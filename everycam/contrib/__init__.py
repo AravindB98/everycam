@@ -1,5 +1,6 @@
 """Community contributions: package, validate, and analyze real device data."""
 
+from .aggregate import aggregate_registry, write_report_md
 from .analyze import analyze_dataset
 from .build import build_contribution, make_signal_bundle, register
 from .card import (
@@ -22,4 +23,6 @@ __all__ = [
     "validate_contribution",
     "validate_registry",
     "analyze_dataset",
+    "aggregate_registry",
+    "write_report_md",
 ]

@@ -201,7 +201,9 @@ everycam contribute --dataset runs/mine/dataset --id my-pours \
 Contributions live in a [`registry/`](registry/) (designed so a web upload portal can sit on top
 later) in two forms: **hosted** (publish your anonymized data to Hugging Face/Zenodo and register
 a link) or **in_repo** (a tiny *signals-only* bundle — never raw frames). A CI workflow runs
-`everycam validate` on every data PR. Full guide: [CONTRIBUTING-DATA.md](CONTRIBUTING-DATA.md).
+`everycam validate` on every data PR, and `everycam aggregate` pools every contribution into a
+live community report → [`registry/REPORT.md`](registry/REPORT.md). Full guide:
+[CONTRIBUTING-DATA.md](CONTRIBUTING-DATA.md).
 
 ## Dataset format
 

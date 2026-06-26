@@ -214,6 +214,22 @@ def cmd_analyze(args) -> int:
     return 0
 
 
+def cmd_aggregate(args) -> int:
+    from .contrib import aggregate_registry, write_report_md
+
+    agg = aggregate_registry(args.registry)
+    if args.out:
+        os.makedirs(args.out, exist_ok=True)
+        with open(os.path.join(args.out, "report.json"), "w") as f:
+            json.dump(agg, f, indent=2)
+    report_path = args.report or os.path.join(args.registry, "REPORT.md")
+    write_report_md(agg, report_path)
+    print(json.dumps({k: agg[k] for k in (
+        "contributions", "total_frames", "by_device", "by_consent", "pooled_contact_ratio")}, indent=2))
+    print(f"[everycam] community report -> {report_path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="everycam", description=f"EveryCam — {__slogan__}")
     p.add_argument("--version", action="version", version=f"everycam {__version__}")
@@ -286,6 +302,12 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--out", default=None)
     an.add_argument("--no-train", dest="no_train", action="store_true", help="skip model eval")
     an.set_defaults(func=cmd_analyze)
+
+    ag = sub.add_parser("aggregate", help="pool all registered datasets into a community report")
+    ag.add_argument("--registry", default="registry")
+    ag.add_argument("--out", default=None, help="dir for report.json")
+    ag.add_argument("--report", default=None, help="path for REPORT.md (default registry/REPORT.md)")
+    ag.set_defaults(func=cmd_aggregate)
     return p
 
 

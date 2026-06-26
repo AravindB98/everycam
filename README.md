@@ -115,6 +115,7 @@ Use real footage instead:
 everycam capture --preset webcam                      # your laptop camera
 everycam capture --preset dashcam --path drive.mp4    # a dashcam clip
 everycam capture --kind stream  --path rtsp://CAM/ID  # a fixed / CCTV-style camera
+everycam record  --seconds 5 --preset webcam          # countdown, then record 5s and save
 everycam capture --preset webcam --hands mediapipe    # 3D hand tracking (pip install -e ".[hands]")
 everycam info  runs/capture/dataset                   # schema + provenance
 everycam backends                                     # which optional backends are installed
@@ -200,6 +201,24 @@ intuitive: webcam / phone / glasses transfer reasonably to one another, while th
 harder. That gap is exactly the open problem a domain-robust capture layer should attack —
 and now there's a number to drive down.
 
+## World model (a peek at imagination)
+
+EveryCam also ships a tiny **latent world model** (`everycam worldmodel <dataset>`): it learns one-step
+forward dynamics — given the current frame's features and the action, predict the *next* frame's features —
+then "imagines" several steps ahead by feeding its own predictions back in. On the synthetic benchmark it
+beats the "nothing moves" baseline by ~3% at one step and **~6–7% over a 5-step rollout** (the gap grows
+with the horizon — the point of a world model). Same idea as video world models like V-JEPA 2, shrunk to a
+closed-form model that trains instantly on CPU.
+
+## Capture in three ways
+
+1. **Web app** — the [in-browser recorder](https://AravindB98.github.io/everycam/record.html) opens your
+   camera, records for a few seconds, and turns motion into signals **on-device** (the video never leaves your
+   machine). It's an installable **PWA** — "Add to Home Screen" and it behaves like an app.
+2. **One command** — `everycam record --seconds 5` (countdown, record, anonymize, save).
+3. **Files / streams** — `everycam capture --preset <phone|dashcam|ipcam|…>` for recorded clips or live
+   network cameras.
+
 ## Privacy by design
 
 ![privacy demo](docs/assets/privacy_demo.png)
@@ -263,7 +282,8 @@ Key features: `observation.state = [ee_x, ee_y, contact]`, `action = [dx, dy, dc
 - [ ] Monocular depth (Depth-Anything) → 3D affordances
 - [ ] Native LeRobot `mp4`-video export + one-line `LeRobotDataset` loader
 - [ ] DNN face/plate detector option for the privacy gate
-- [ ] A small **world-model** head (predict next latent from action) over the same dataset
+- [x] World-model head — latent forward dynamics + rollout (`everycam worldmodel`)
+- [x] In-browser recorder + installable PWA + `everycam record` (timed capture)
 
 ---
 

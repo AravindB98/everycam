@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>EveryCam — every camera is a robot teacher</title>
 <meta name="description" content="Turn everyday camera videos into privacy-first lessons that robots can learn from." />
+<meta name="theme-color" content="#0d1117" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icon-192.png" />
 <style>
   :root{ --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa4af; --line:#283039;
          --accent:#6ea8fe; --accent2:#3fb950; --pink:#f778ba; --radius:16px; }
@@ -59,10 +62,12 @@
   <p>Turn ordinary videos — your webcam, phone, dashcam, or smart glasses — into privacy-first
      "lessons" that robots can learn from. Faces are blurred automatically. It's free and open-source.</p>
   <div class="btns">
+    <a class="btn green" href="record.html">🎥 Record from your camera</a>
     <a class="btn primary" href="#what">What is this?</a>
-    <a class="btn green" href="#contribute">Contribute data</a>
-    <a class="btn" href="https://github.com/AravindB98/everycam">View on GitHub</a>
+    <a class="btn" href="#contribute">Contribute data</a>
+    <a class="btn" href="https://github.com/AravindB98/everycam">GitHub</a>
   </div>
+  <p style="color:var(--muted);font-size:14px;margin-top:12px">Tip: on phone or desktop you can <b>install this as an app</b> — look for "Add to Home Screen" / the install icon in your browser.</p>
 </header>
 
 <main class="wrap">
@@ -238,5 +243,6 @@
       + " --license "+c.license+" --data-mode "+c.data_mode+" --i-have-rights";
     navigator.clipboard && navigator.clipboard.writeText(cmd); }
 </script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js').catch(function(){});}</script>
 </body>
 </html>

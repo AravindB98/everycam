@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EveryCam — record from your camera</title>
+<meta name="theme-color" content="#0d1117" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--ink:#e6edf3;--muted:#9aa4af;--line:#283039;
+        --accent:#6ea8fe;--accent2:#3fb950;--pink:#f778ba;--r:16px}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 60px}
+  a{color:var(--accent)} h1{font-size:30px;margin:0 0 4px} .slogan{color:var(--accent);font-weight:600;margin:0 0 14px}
+  .note{background:rgba(62,185,80,.08);border:1px solid rgba(62,185,80,.35);border-radius:var(--r);padding:14px;color:#c9f7d4;margin:14px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0}
+  label{display:block;font-weight:600;margin:12px 0 6px}
+  input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0b0f14;color:var(--ink);font-size:15px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  button{cursor:pointer;padding:12px 18px;border-radius:10px;border:1px solid var(--line);background:#0b0f14;color:var(--ink);font-weight:700;font-size:15px}
+  button.go{background:var(--accent2);color:#06210f;border-color:transparent}
+  button.alt{background:var(--accent);color:#08111f;border-color:transparent}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .vidwrap{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#000;margin-top:12px}
+  video{width:100%;display:block;transform:scaleX(-1)}
+  #dot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px rgba(247,120,186,.3);transform:translate(-50%,-50%);display:none;pointer-events:none}
+  .bar{height:10px;background:#0b0f14;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:12px}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent2);transition:width .1s linear}
+  .status{color:var(--muted);margin-top:8px;min-height:22px}
+  .check{display:flex;gap:10px;align-items:flex-start;color:var(--muted);margin:12px 0}
+  .check input{width:auto;margin-top:5px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  pre{background:#0b0f14;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:13px;max-height:180px}
+  @media(max-width:560px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p><a href="index.html">← EveryCam</a></p>
+  <h1>Record from your camera 🎥</h1>
+  <p class="slogan">Your video never leaves this device.</p>
+  <div class="note"><b>How this works:</b> your browser opens the camera, watches your hand move for a few
+  seconds, and turns the <b>motion into numbers</b> right here on your device. The video is <b>never uploaded
+  or saved</b> — only the motion signals are, and only if you choose to download/contribute them.</div>
+
+  <div class="panel">
+    <div class="row">
+      <div><label for="handle">Your name / GitHub handle</label><input id="handle" placeholder="e.g. AravindB98" /></div>
+      <div><label for="task">What will you do?</label><input id="task" placeholder="e.g. pick up a cup" /></div>
+    </div>
+    <div class="row">
+      <div><label for="secs">Duration</label>
+        <select id="secs"><option value="5">5 seconds</option><option value="8">8 seconds</option><option value="12">12 seconds</option></select></div>
+      <div><label for="license">License</label>
+        <select id="license"><option>CC-BY-4.0</option><option>CC0-1.0</option></select></div>
+    </div>
+    <label class="check"><input type="checkbox" id="attest" />
+      <span>This is me (or people who consented), and I'm okay sharing the motion signals. (required)</span></label>
+    <div class="btns"><button class="go" id="startBtn">Start camera &amp; record</button></div>
+    <div class="vidwrap"><video id="video" playsinline muted></video><div id="dot"></div></div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="status" id="status">Fill in the boxes, tick the box, then press start.</div>
+  </div>
+
+  <div class="panel" id="results" style="display:none">
+    <h3 style="margin:0 0 6px">Done! 🎉 Here are your signals (no video).</h3>
+    <p class="status" id="summary"></p>
+    <div class="btns">
+      <button class="go" id="dlSignals">Download signals.jsonl</button>
+      <button id="dlCard">Download card.json</button>
+      <button class="alt" id="issueBtn">Open a contribution issue</button>
+    </div>
+    <pre id="preview"></pre>
+    <p class="status">To contribute: download <code>signals.jsonl</code>, then either attach it to a pull
+      request under <code>registry/data/&lt;your-id&gt;/</code>, or paste the card into the issue. The desktop
+      tool (<code>everycam</code>) can also do this in one command with richer hand + object signals.</p>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const REPO = "AravindB98/everycam";
+let stream=null, traj=[], prev=null, recording=false;
+const CAPW=64, CAPH=48, CONTACT=0.08;
+const cap=document.createElement('canvas'); cap.width=CAPW; cap.height=CAPH;
+const cctx=cap.getContext('2d',{willReadFrequently:true});
+
+$('attest').addEventListener('change', ()=>{ $('startBtn').disabled = !$('attest').checked; });
+$('startBtn').disabled = true;
+
+function slug(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40) || 'clip'; }
+function myId(){ return slug(($('handle').value||'me')+'-'+($('task').value||'clip')); }
+
+async function start(){
+  if(!$('attest').checked) return;
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}, audio:false});
+  }catch(e){ $('status').textContent = "Couldn't open the camera: "+e.message+". Check camera permission."; return; }
+  const v=$('video'); v.srcObject=stream; await v.play();
+  $('startBtn').disabled=true; $('results').style.display='none';
+  traj=[]; prev=null;
+  for(let c=3;c>=1;c--){ $('status').textContent="Get ready… "+c; await wait(700); }
+  $('status').textContent="Recording — move your hand and do the task!";
+  $('dot').style.display='block';
+  const secs=parseFloat($('secs').value), t0=performance.now(); recording=true;
+  const tick=()=>{
+    const el=(performance.now()-t0)/1000;
+    if(el>=secs || !recording){ finish(); return; }
+    sample(el); $('prog').style.width=Math.min(100,100*el/secs)+'%';
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+function sample(t){
+  const v=$('video');
+  cctx.drawImage(v,0,0,CAPW,CAPH);
+  const img=cctx.getImageData(0,0,CAPW,CAPH).data;
+  let sx=0,sy=0,sw=0;
+  if(prev){
+    for(let y=0;y<CAPH;y++)for(let x=0;x<CAPW;x++){
+      const i=(y*CAPW+x)*4;
+      const d=Math.abs(img[i]-prev[i])+Math.abs(img[i+1]-prev[i+1])+Math.abs(img[i+2]-prev[i+2]);
+      if(d>45){ sw+=d; sx+=x*d; sy+=y*d; }
+    }
+  }
+  prev=img.slice(0);
+  let xn,yn,m;
+  if(sw>0){ xn=(sx/sw)/CAPW; yn=(sy/sw)/CAPH; m=Math.min(1, sw/(CAPW*CAPH*55)); }
+  else { const l=traj[traj.length-1]; xn=l?l.x:0.5; yn=l?l.y:0.5; m=0; }
+  traj.push({x:xn,y:yn,m});
+  // move the on-screen dot (mirror x to match the flipped preview)
+  const r=$('video').getBoundingClientRect(), wr=r.width, hr=r.height;
+  const dot=$('dot'); dot.style.left=((1-xn)*wr)+'px'; dot.style.top=(yn*hr)+'px';
+}
+
+function buildSignals(){
+  const rows=[];
+  for(let i=0;i<traj.length;i++){
+    const s=traj[i], contact=s.m>CONTACT;
+    const state=[round(s.x),round(s.y),contact?1:0];
+    const n=traj[i+1];
+    const action=n?[round(n.x-s.x),round(n.y-s.y),0]:[0,0,0];
+    rows.push({"observation.state":state,"action":action,"observation.affordance_xy":[null,null],"contact":contact});
+  }
+  return rows.map(r=>JSON.stringify(r)).join("\n")+"\n";
+}
+const round=x=>Math.round(x*1e4)/1e4;
+function buildCard(){
+  return { id:myId(), title:($('task').value||'My clip')+' ('+($('handle').value||'me')+')',
+    contributor:$('handle').value||'me', device:'webcam', task:$('task').value||'task',
+    consent:'self', license:$('license').value, anonymized:true, data_mode:'in_repo',
+    data_path:'data/'+myId(), schema_version:'0.1.0' };
+}
+function dl(name,text,type){ const b=new Blob([text],{type:type||'application/json'}); const u=URL.createObjectURL(b);
+  const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u); }
+
+function finish(){
+  recording=false; $('dot').style.display='none';
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); }
+  $('startBtn').disabled=false; $('prog').style.width='100%';
+  const contacts=traj.filter(s=>s.m>CONTACT).length;
+  $('status').textContent="Recorded "+traj.length+" frames. Video discarded.";
+  $('summary').textContent = traj.length+" frames · "+Math.round(100*contacts/Math.max(1,traj.length))+"% active-motion · video never left your device.";
+  const sig=buildSignals(), card=buildCard();
+  $('preview').textContent = JSON.stringify(card,null,2);
+  $('dlSignals').onclick=()=>dl('signals.jsonl', sig, 'application/x-ndjson');
+  $('dlCard').onclick=()=>dl('card.json', JSON.stringify(card,null,2));
+  $('issueBtn').onclick=()=>{
+    const body="### New data contribution (from the in-browser recorder)\n\n```json\n"+JSON.stringify(card,null,2)
+      +"\n```\n\n- [x] This is me / consenting people; only motion signals are shared.\n"
+      +"- [ ] I've attached `signals.jsonl` (downloaded) to the PR under `registry/"+card.data_path+"/`.\n";
+    window.open("https://github.com/"+REPO+"/issues/new?labels=data-contribution&title="
+      +encodeURIComponent("Data: "+card.id)+"&body="+encodeURIComponent(body),"_blank");
+  };
+  $('results').style.display='block';
+}
+$('startBtn').addEventListener('click', start);
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('service-worker.js').catch(()=>{}); }
+</script>
+</body>
+</html>

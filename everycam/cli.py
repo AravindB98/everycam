@@ -107,6 +107,44 @@ def cmd_capture(args) -> int:
     return 0
 
 
+def cmd_record(args) -> int:
+    """Open the camera, count down, record for N seconds, then save a dataset."""
+    import time
+
+    from .config import PipelineConfig, SourceConfig
+    from .pipeline import Pipeline
+
+    if args.kind:
+        cfg = PipelineConfig()
+        cfg.source = SourceConfig(kind=args.kind, path=args.path, device_index=args.device,
+                                  source_type=args.kind)
+    else:
+        cfg = PipelineConfig.from_preset(args.preset, path=args.path)
+    fps = cfg.source.fps or 30.0
+    cfg.source.max_frames = max(1, int(args.seconds * fps))
+    cfg.perception.hand_backend = args.hands
+    if args.out:
+        cfg.export.out_dir = args.out
+
+    src = args.kind or args.preset
+    print(f"[everycam] opening your {src} camera — recording {args.seconds:g}s "
+          f"(~{cfg.source.max_frames} frames). Get your hands and an object in view!")
+    if not args.no_countdown:
+        for i in (3, 2, 1):
+            print(f"  starting in {i}…")
+            time.sleep(1)
+        print("  recording — go!")
+
+    pipe = Pipeline(cfg)
+    episode, out_dir = pipe.run_and_export()
+    print(episode.summary())
+    print(f"[everycam] privacy: {pipe.last_privacy}")
+    print(f"[everycam] saved -> {out_dir}")
+    print(f"[everycam] next: `everycam analyze {out_dir}`  or  "
+          f"`everycam contribute --dataset {out_dir} --id <slug> ... --i-have-rights`")
+    return 0
+
+
 def cmd_train(args) -> int:
     from .models import train_from_dataset
 
@@ -214,6 +252,19 @@ def cmd_analyze(args) -> int:
     return 0
 
 
+def cmd_worldmodel(args) -> int:
+    from .models import train_world_model_from_dataset
+
+    m = train_world_model_from_dataset(args.dataset, out_dir=args.out, seed=args.seed)
+    print(json.dumps(m, indent=2))
+    print(f"[everycam] one-step next-frame (latent) prediction is "
+          f"{m['improvement_vs_identity_pct']}% better than assuming nothing moves.")
+    if "rollout_improvement_pct" in m:
+        print(f"[everycam] imagining {m['rollout_k']} frames ahead: "
+              f"{m['rollout_improvement_pct']}% better than 'nothing moves'.")
+    return 0
+
+
 def cmd_aggregate(args) -> int:
     from .contrib import aggregate_registry, write_report_md
 
@@ -254,6 +305,17 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--max-frames", dest="max_frames", type=int, default=150)
     c.add_argument("--out", default="runs/capture/dataset")
     c.set_defaults(func=cmd_capture)
+
+    r = sub.add_parser("record", help="open your camera and record for N seconds, then save a dataset")
+    r.add_argument("--seconds", type=float, default=5.0)
+    r.add_argument("--preset", default="webcam", help="camera preset (default: webcam)")
+    r.add_argument("--kind", default=None, help="override preset: synthetic|webcam|file|stream|image_dir")
+    r.add_argument("--path", default=None, help="file path / stream URL (for file/stream)")
+    r.add_argument("--device", type=int, default=0, help="webcam device index")
+    r.add_argument("--hands", choices=["auto", "mediapipe", "heuristic", "none"], default="auto")
+    r.add_argument("--out", default="runs/record/dataset")
+    r.add_argument("--no-countdown", dest="no_countdown", action="store_true")
+    r.set_defaults(func=cmd_record)
 
     t = sub.add_parser("train", help="train the affordance+contact model on a dataset")
     t.add_argument("dataset")
@@ -310,6 +372,12 @@ def build_parser() -> argparse.ArgumentParser:
     ag.add_argument("--out", default=None, help="dir for report.json")
     ag.add_argument("--report", default=None, help="path for REPORT.md (default registry/REPORT.md)")
     ag.set_defaults(func=cmd_aggregate)
+
+    wm = sub.add_parser("worldmodel", help="train a tiny latent world model (predict the next frame)")
+    wm.add_argument("dataset")
+    wm.add_argument("--out", default="runs/worldmodel")
+    wm.add_argument("--seed", type=int, default=0)
+    wm.set_defaults(func=cmd_worldmodel)
     return p
 
 

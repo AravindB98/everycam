@@ -18,7 +18,8 @@ just the *numbers* (no actual video of people).
 
 **The easiest way — the website:** open the
 [contribute form](https://AravindB98.github.io/everycam/#contribute), fill in a few boxes, tick the
-consent box, and it opens a pre-filled request for you. A maintainer takes it from there.
+consent box, and it opens a pre-filled request for you. If you give a **hosted** link, a bot
+validates it and **opens the pull request automatically**; otherwise a maintainer takes it from there.
 
 **Or with one command** (if you've installed the tool):
 

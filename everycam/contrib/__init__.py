@@ -3,6 +3,7 @@
 from .aggregate import aggregate_registry, write_report_md
 from .analyze import analyze_dataset
 from .build import build_contribution, make_signal_bundle, register
+from .issue import process_issue
 from .card import (
     ALLOWED_CONSENT,
     ALLOWED_DATA_MODES,
@@ -25,4 +26,5 @@ __all__ = [
     "analyze_dataset",
     "aggregate_registry",
     "write_report_md",
+    "process_issue",
 ]

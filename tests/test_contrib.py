@@ -73,6 +73,49 @@ def test_analyze_dataset(demo_dataset):
     assert s["anonymized"] is True
 
 
+def test_issue_hosted_is_pr_ready():
+    import json
+
+    from everycam.contrib import process_issue
+
+    card = _good_card()  # hosted + valid
+    body = "Hi!\n```json\n" + json.dumps(card) + "\n```\nthanks"
+    r = process_issue(body)
+    assert r["action"] == "hosted"
+    assert r["id"] == "my-test"
+    assert card["id"] in r["card_line"]
+
+
+def test_issue_no_json_is_invalid():
+    from everycam.contrib import process_issue
+
+    r = process_issue("just some text, no card here")
+    assert r["action"] == "invalid" and r["comment"]
+
+
+def test_issue_in_repo_gets_guidance():
+    import json
+
+    from everycam.contrib import process_issue
+
+    card = _good_card()
+    card["data_mode"] = "in_repo"
+    card.pop("data_url", None)
+    r = process_issue("```json\n" + json.dumps(card) + "\n```")
+    assert r["action"] == "guidance"
+
+
+def test_issue_invalid_card_lists_errors():
+    import json
+
+    from everycam.contrib import process_issue
+
+    card = _good_card()
+    card["consent"] = "unspecified"
+    r = process_issue("```json\n" + json.dumps(card) + "\n```")
+    assert r["action"] == "invalid" and "consent" in r["comment"]
+
+
 def test_aggregate_registry(demo_dataset, tmp_path):
     from everycam.contrib import aggregate_registry
 

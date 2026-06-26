@@ -1,0 +1,59 @@
+name: data-contribution
+
+# When someone opens a "data-contribution" issue (e.g. from the website form),
+# validate the dataset card and — for hosted datasets — open a registry PR automatically.
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  to-pr:
+    if: contains(github.event.issue.labels.*.name, 'data-contribution')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -e ".[data]"
+
+      - name: Parse + validate the dataset card
+        id: parse
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python scripts/issue_to_card.py
+
+      - name: Reply with fixes / guidance
+        if: steps.parse.outputs.action != 'hosted'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue comment "${{ github.event.issue.number }}" --body-file comment.md
+
+      - name: Open a registry PR (hosted contribution)
+        if: steps.parse.outputs.action == 'hosted'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          ID="${{ steps.parse.outputs.id }}"
+          ISSUE="${{ github.event.issue.number }}"
+          BR="data/${ID}-${ISSUE}"
+          git config user.name "everycam-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BR"
+          cat card.jsonl >> registry/datasets.jsonl
+          everycam validate --registry registry
+          git add registry/datasets.jsonl
+          git commit -m "data: add ${ID} (from #${ISSUE})"
+          git push -u origin "$BR"
+          gh pr create --base main --head "$BR" \
+            --title "data: add ${ID}" \
+            --body "Auto-generated from #${ISSUE}. Closes #${ISSUE} when merged."
+          gh issue comment "$ISSUE" \
+            --body "🎉 Opened a pull request to add your dataset to the registry. A maintainer will review it shortly — thank you for contributing!"

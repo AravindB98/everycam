@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EveryCam — every camera is a robot teacher</title>
+<meta name="description" content="Turn everyday camera videos into privacy-first lessons that robots can learn from." />
+<style>
+  :root{ --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa4af; --line:#283039;
+         --accent:#6ea8fe; --accent2:#3fb950; --pink:#f778ba; --radius:16px; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.6}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header.hero{padding:64px 20px 36px;text-align:center;
+    background:radial-gradient(1200px 400px at 50% -10%, #1b2330 0%, var(--bg) 60%)}
+  .hero h1{font-size:48px;margin:0 0 6px;letter-spacing:-1px}
+  .hero .slogan{color:var(--accent);font-size:20px;font-weight:600;margin:0 0 14px}
+  .hero p{max-width:680px;margin:0 auto 22px;color:var(--muted);font-size:18px}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:11px 18px;border-radius:999px;font-weight:600;border:1px solid var(--line)}
+  .btn.primary{background:var(--accent);color:#08111f;border-color:transparent}
+  .btn.green{background:var(--accent2);color:#06210f;border-color:transparent}
+  section{padding:40px 0;border-top:1px solid var(--line)}
+  h2{font-size:28px;margin:0 0 6px} .lead{color:var(--muted);margin:0 0 22px;font-size:17px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .step .n{font-size:22px} .step b{display:block;margin:6px 0 2px}
+  .step small{color:var(--muted)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .card b{color:var(--ink)} .card p{margin:6px 0 0;color:var(--muted);font-size:15px}
+  img.full{width:100%;border-radius:var(--radius);border:1px solid var(--line);background:#0b0f14}
+  .note{background:rgba(247,120,186,.08);border:1px solid rgba(247,120,186,.35);
+        border-radius:var(--radius);padding:16px;color:#ffd9ee}
+  form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  label{display:block;font-weight:600;margin:14px 0 6px}
+  input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
+    background:#0b0f14;color:var(--ink);font-size:15px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .check{display:flex;gap:10px;align-items:flex-start;margin:16px 0;color:var(--muted)}
+  .check input{width:auto;margin-top:5px}
+  .formbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  button{cursor:pointer;padding:11px 16px;border-radius:10px;border:1px solid var(--line);
+    background:#0b0f14;color:var(--ink);font-weight:600;font-size:15px}
+  button.go{background:var(--accent2);color:#06210f;border-color:transparent}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  pre{background:#0b0f14;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:13px}
+  footer{padding:30px 0 60px;color:var(--muted);text-align:center;font-size:14px}
+  @media(max-width:560px){.hero h1{font-size:36px}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>EveryCam</h1>
+  <p class="slogan">Every camera is a robot teacher.</p>
+  <p>Turn ordinary videos — your webcam, phone, dashcam, or smart glasses — into privacy-first
+     "lessons" that robots can learn from. Faces are blurred automatically. It's free and open-source.</p>
+  <div class="btns">
+    <a class="btn primary" href="#what">What is this?</a>
+    <a class="btn green" href="#contribute">Contribute data</a>
+    <a class="btn" href="https://github.com/AravindB98/everycam">View on GitHub</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="what">
+    <h2>What is EveryCam? 🤖</h2>
+    <p class="lead">In one sentence — and no jargon.</p>
+    <p>Robots are great at repeating one factory task, but surprisingly <b>bad</b> at simple things you do
+    without thinking: picking up a cup, folding a shirt, opening a drawer. To learn a physical skill, a robot
+    needs <b>thousands of examples</b>, and collecting those with real robots is slow and expensive.</p>
+    <p>But humans already do these tasks all day, on camera. EveryCam turns "a human hand doing a thing in a
+    video" into something a robot can read — so robots can learn from <b>us</b>, using cheap everyday cameras
+    instead of costly robot farms. And it protects privacy by blurring faces <b>before</b> anything is saved.</p>
+    <p><a href="EXPLAINER.md">Read the full plain-English explainer →</a></p>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="lead">An assembly line for a video clip.</p>
+    <div class="steps">
+      <div class="step"><div class="n">📷</div><b>1. Camera</b><small>any everyday camera, live or a file</small></div>
+      <div class="step"><div class="n">🕶️</div><b>2. Privacy first</b><small>blur faces & plates before saving</small></div>
+      <div class="step"><div class="n">✋</div><b>3. Look</b><small>find the hand and objects</small></div>
+      <div class="step"><div class="n">➡️</div><b>4. Translate</b><small>hand motion → robot actions + grab points</small></div>
+      <div class="step"><div class="n">📦</div><b>5. Save & learn</b><small>tidy dataset; a small AI learns from it</small></div>
+    </div>
+    <p style="margin-top:18px"><img class="full" src="assets/pipeline.svg" alt="EveryCam pipeline" /></p>
+  </section>
+
+  <section id="tech">
+    <h2>The technologies, in plain words</h2>
+    <p class="lead">You'll see these terms around the project — here's what they actually mean.</p>
+    <div class="cards">
+      <div class="card"><b>Physical / Embodied AI</b><p>AI that acts in the real world (robots), not just text on a screen.</p></div>
+      <div class="card"><b>Computer vision</b><p>Teaching computers to "see" — find hands, objects, and motion in pictures.</p></div>
+      <div class="card"><b>Hand tracking</b><p>Software (e.g. MediaPipe) that locates the points of a hand in a video.</p></div>
+      <div class="card"><b>Affordance</b><p>A fancy word for "where do I grab this / what can I do with it?"</p></div>
+      <div class="card"><b>Imitation learning</b><p>A robot learning by copying a demonstration — like learning a dance by watching.</p></div>
+      <div class="card"><b>Dataset (LeRobot)</b><p>A neat pile of examples used to train AI, saved in a format robot tools can read.</p></div>
+      <div class="card"><b>Anonymization</b><p>Removing things that identify a person — here, blurring faces and plates.</p></div>
+      <div class="card"><b>Open source / PR</b><p>Free public code; a "pull request" is a polite proposal to add your change.</p></div>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy comes first 🛡️</h2>
+    <div class="note">
+      EveryCam blurs faces and license plates <b>before</b> a frame is ever saved, and has <b>no ability
+      to recognize or track people</b>. If you contribute the lightweight way, only the <b>numbers</b>
+      (where the hand moved) are shared — never the actual video of people.
+    </div>
+  </section>
+
+  <section id="contribute">
+    <h2>Contribute your data (no coding needed)</h2>
+    <p class="lead">Fill this in to create a "dataset card" and open a pre-filled GitHub issue. A maintainer
+      adds it to the project. <b>Only share videos you have the right to share.</b></p>
+    <form onsubmit="return false">
+      <div class="row">
+        <div><label for="handle">Your GitHub handle</label><input id="handle" placeholder="e.g. AravindB98" /></div>
+        <div><label for="id">Short id (lowercase)</label><input id="id" placeholder="e.g. maria-pours-water" /></div>
+      </div>
+      <label for="title">Title</label><input id="title" placeholder="e.g. Pouring water, 20 clips" />
+      <div class="row">
+        <div><label for="device">Which camera?</label>
+          <select id="device">
+            <option value="webcam">Webcam (laptop)</option>
+            <option value="phone">Phone</option>
+            <option value="dashcam">Dashcam</option>
+            <option value="fixed_cam">Fixed / CCTV-style</option>
+            <option value="glasses">Smart glasses</option>
+            <option value="other">Other</option>
+          </select></div>
+        <div><label for="task">What activity?</label><input id="task" placeholder="e.g. pour water into a cup" /></div>
+      </div>
+      <div class="row">
+        <div><label for="consent">Consent</label>
+          <select id="consent">
+            <option value="self">It's only me on camera</option>
+            <option value="participants-consented">Everyone filmed gave consent</option>
+            <option value="public-domain">Public-domain source</option>
+            <option value="public-cc">Permissively-licensed public source</option>
+          </select></div>
+        <div><label for="license">License</label>
+          <select id="license">
+            <option value="CC-BY-4.0">CC-BY-4.0 (credit me)</option>
+            <option value="CC0-1.0">CC0-1.0 (anyone can use freely)</option>
+          </select></div>
+      </div>
+      <label>How will you share the data?</label>
+      <div style="color:var(--muted);font-size:15px">
+        <label class="check"><input type="radio" name="mode" value="in_repo" checked />
+          <span><b>Signals only</b> — run the EveryCam tool; it uploads just the numbers, no video. (Recommended)</span></label>
+        <label class="check"><input type="radio" name="mode" value="hosted" id="mode-hosted" />
+          <span><b>Hosted link</b> — I published my anonymized dataset somewhere (e.g. Hugging Face) and have a link.</span></label>
+      </div>
+      <div id="urlbox" style="display:none"><label for="dataurl">Link to your anonymized dataset (https)</label>
+        <input id="dataurl" placeholder="https://huggingface.co/datasets/..." /></div>
+
+      <label class="check"><input type="checkbox" id="attest" />
+        <span>I confirm I have the right to share this footage, everyone in it is me or consented, and I'll let
+          EveryCam blur faces/plates. (required)</span></label>
+
+      <div class="formbtns">
+        <button class="go" id="issueBtn" disabled onclick="openIssue()">Generate &amp; open a GitHub issue</button>
+        <button onclick="copyJson()">Copy the card (JSON)</button>
+        <button onclick="copyCli()">Copy the tool command</button>
+      </div>
+      <pre id="preview" style="margin-top:14px;display:none"></pre>
+    </form>
+    <p style="margin-top:14px;color:var(--muted)">Prefer the command line? See
+      <a href="https://github.com/AravindB98/everycam/blob/main/CONTRIBUTING-DATA.md">CONTRIBUTING-DATA.md</a>
+      or run <code>bash scripts/webcam_contribute.sh</code>.</p>
+  </section>
+
+</main>
+
+<footer>
+  EveryCam · MIT licensed · made by <a href="https://github.com/AravindB98">AravindB98</a> ·
+  <a href="https://github.com/AravindB98/everycam">GitHub</a>
+</footer>
+
+<script>
+  var REPO = "AravindB98/everycam";
+  var attest = document.getElementById('attest');
+  var issueBtn = document.getElementById('issueBtn');
+  attest.addEventListener('change', function(){ issueBtn.disabled = !attest.checked; });
+  document.querySelectorAll('input[name=mode]').forEach(function(r){
+    r.addEventListener('change', function(){
+      document.getElementById('urlbox').style.display =
+        document.querySelector('input[name=mode]:checked').value === 'hosted' ? 'block' : 'none';
+    });
+  });
+  function val(id){ var e=document.getElementById(id); return e ? e.value.trim() : ''; }
+  function buildCard(){
+    var mode = document.querySelector('input[name=mode]:checked').value;
+    var card = { id: val('id'), title: val('title'), contributor: val('handle'),
+      device: val('device'), task: val('task'), consent: val('consent'),
+      license: val('license'), anonymized: true, data_mode: mode, schema_version: "0.1.0" };
+    if(mode==='hosted') card.data_url = val('dataurl');
+    return card;
+  }
+  function problems(c){
+    var e=[];
+    if(!/^[a-z0-9][a-z0-9_-]{2,48}$/.test(c.id)) e.push("id must be lowercase letters/numbers/-/_ (3+ chars)");
+    ["title","contributor","task"].forEach(function(k){ if(!c[k]) e.push("please fill in "+k); });
+    if(c.data_mode==='hosted' && !(c.data_url||'').startsWith('https://')) e.push("please add an https link to your data");
+    return e;
+  }
+  function show(card){ var p=document.getElementById('preview'); p.style.display='block';
+    p.textContent = JSON.stringify(card,null,2); }
+  function openIssue(){
+    if(!attest.checked){ alert("Please confirm you have the right to share this data."); return; }
+    var c=buildCard(), errs=problems(c);
+    if(errs.length){ alert("Please fix:\n- "+errs.join("\n- ")); return; }
+    show(c);
+    var body = "### New data contribution\n\nThanks for contributing to EveryCam! A maintainer will review and add this.\n\n"
+      + "```json\n"+JSON.stringify(c,null,2)+"\n```\n\n"
+      + "- [x] I have the right to share this footage; faces/plates are anonymized.\n"
+      + (c.data_mode==='in_repo'
+          ? "- [ ] I will run `everycam contribute ... --data-mode in_repo --i-have-rights` to attach the signals.\n"
+          : "- [ ] Data is published at the link above.\n");
+    var url = "https://github.com/"+REPO+"/issues/new?labels=data-contribution&title="
+      + encodeURIComponent("Data: "+c.id) + "&body=" + encodeURIComponent(body);
+    window.open(url,"_blank");
+  }
+  function copyJson(){ var c=buildCard(); show(c);
+    navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(c)); }
+  function copyCli(){ var c=buildCard(); show(c);
+    var cmd = "everycam contribute --dataset runs/"+(c.id||'my')+"/dataset --id "+(c.id||'my-id')
+      + " --title \""+(c.title||'My clip')+"\" --contributor "+(c.contributor||'me')
+      + " --device "+c.device+" --task \""+(c.task||'task')+"\" --consent "+c.consent
+      + " --license "+c.license+" --data-mode "+c.data_mode+" --i-have-rights";
+    navigator.clipboard && navigator.clipboard.writeText(cmd); }
+</script>
+</body>
+</html>

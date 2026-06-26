@@ -169,11 +169,52 @@ def _glasses() -> PipelineConfig:
     return c
 
 
+def _phone_ip() -> PipelineConfig:
+    # Phone used as a wireless camera (IP Webcam / DroidCam app) over http/rtsp.
+    c = PipelineConfig()
+    c.source = SourceConfig(kind="stream", source_type="phone", device="phone_ip_camera")
+    c.privacy = PrivacyConfig(blur_faces=True, blur_plates=True)
+    c.export.task = "phone (wireless) manipulation"
+    return c
+
+
+def _ipcam() -> PipelineConfig:
+    # Generic IP / RTSP network camera.
+    c = PipelineConfig()
+    c.source = SourceConfig(kind="stream", source_type="fixed_cam", device="ip_camera")
+    c.privacy = PrivacyConfig(blur_faces=True, blur_plates=True, strength=45)
+    c.export.task = "ip-camera activity"
+    return c
+
+
+def _gopro() -> PipelineConfig:
+    # Action cam (GoPro/Insta360) recording, or its UVC webcam mode.
+    c = PipelineConfig()
+    c.source = SourceConfig(kind="file", source_type="glasses", device="action_cam")
+    c.privacy = PrivacyConfig(blur_faces=True, blur_plates=True)
+    c.export.task = "egocentric action-cam manipulation"
+    return c
+
+
+def _frames() -> PipelineConfig:
+    # A folder of already-extracted image frames.
+    c = PipelineConfig()
+    c.source = SourceConfig(kind="image_dir", source_type="other", device="image_folder")
+    c.privacy = PrivacyConfig(blur_faces=True, blur_plates=True)
+    c.export.task = "image-folder activity"
+    return c
+
+
 PRESETS = {
     "webcam": _webcam,
     "phone": _phone,
+    "phone_ip": _phone_ip,
     "dashcam": _dashcam,
     "fixed_cam": _fixed_cam,
-    "cctv": _fixed_cam,  # alias
+    "cctv": _fixed_cam,   # alias
+    "ipcam": _ipcam,
+    "rtsp": _ipcam,       # alias
     "glasses": _glasses,
+    "gopro": _gopro,
+    "frames": _frames,
 }

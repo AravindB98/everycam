@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🌐 Project website
+    url: https://AravindB98.github.io/everycam/
+    about: What EveryCam is and how to contribute — no coding needed.
+  - name: 📖 Plain-English explainer
+    url: https://github.com/AravindB98/everycam/blob/main/docs/EXPLAINER.md
+    about: The project explained for non-technical readers.
+  - name: 🎥 Data contributor guide
+    url: https://github.com/AravindB98/everycam/blob/main/CONTRIBUTING-DATA.md
+    about: Step-by-step for contributing data from your device.

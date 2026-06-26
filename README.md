@@ -18,6 +18,16 @@ Turn any everyday camera — **webcam, phone, dashcam, fixed/CCTV-style, or smar
 
 ---
 
+> 🎓 **New to this? Start with the [plain-English explainer](docs/EXPLAINER.md)** — written so a
+> middle-schooler can follow it, no tech background needed. There's also a friendly
+> [project website](https://AravindB98.github.io/everycam/) with a no-code way to contribute.
+
+**In plain English:** EveryCam turns ordinary videos (webcam, phone, dashcam, smart glasses) into
+"lessons" that robots can learn from — automatically blurring faces so privacy is protected. Robots
+struggle to learn everyday physical skills because practicing on real robots is slow and costly;
+human video from cheap, everyday cameras is the abundant alternative, and EveryCam is the tool that
+converts it — responsibly.
+
 ## Why EveryCam?
 
 The hardest bottleneck in **Physical AI** isn't model architectures — it's **robot training data**.
@@ -62,7 +72,13 @@ EveryCam isn't claiming to invent the science — it's the missing, responsible 
 | `phone` | recorded video file | blur faces + plates | handheld manipulation clips |
 | `dashcam` | driving video file | blur faces + **plates** | driving-scene / ego-motion data |
 | `fixed_cam` / `cctv` | RTSP / HTTP stream | blur faces + plates (strong) | overhead "activity" data (consented/public) |
+| `phone_ip` | phone as a wireless cam (IP Webcam app) | blur faces + plates | live phone capture |
 | `glasses` | egocentric video file | blur faces + plates | first-person manipulation |
+| `ipcam` / `rtsp` | IP / RTSP network camera | blur faces + plates (strong) | networked cameras |
+| `gopro` | action-cam video / UVC mode | blur faces + plates | action-cam egocentric |
+| `frames` | a folder of image frames | blur faces + plates | pre-extracted frames |
+
+**Full how-to-connect guide for every platform:** [docs/CAMERAS.md](docs/CAMERAS.md).
 
 > EveryCam **never** links footage to identity and has no face-recognition or ID-matching capability. See [PRIVACY.md](PRIVACY.md).
 
@@ -130,6 +146,19 @@ pure-numpy model. **That's why the whole thing runs on a bare laptop.**
 ![sample frames](docs/assets/sample_frames.png)
 
 ---
+
+## Jargon, decoded
+
+New to the field? Plain-English definitions (the full version lives in the [explainer](docs/EXPLAINER.md)):
+
+- **Physical AI / Embodied AI** — AI that acts in the real world (robots), not just text on a screen.
+- **VLA (Vision-Language-Action)** — a model that looks, reads an instruction, and outputs robot actions.
+- **Affordance** — "where do I grab this / what can I do with it?"
+- **Imitation learning** — a robot learning by copying a human demonstration.
+- **Egocentric video** — first-person video (what a head- or chest-worn camera sees).
+- **LeRobot** — Hugging Face's popular format + tools for robot datasets; EveryCam exports to it.
+- **World model** — an AI's "imagination" that predicts what happens next in a scene.
+- **Anonymization** — removing identifying details; here, blurring faces/plates *before* saving.
 
 ## Results (bundled synthetic benchmark)
 

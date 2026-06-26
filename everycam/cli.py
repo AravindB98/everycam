@@ -243,7 +243,9 @@ def build_parser() -> argparse.ArgumentParser:
     d.set_defaults(func=cmd_demo)
 
     c = sub.add_parser("capture", help="build a dataset from a camera/file/stream/preset")
-    c.add_argument("--preset", help="webcam|phone|dashcam|fixed_cam|cctv|glasses")
+    c.add_argument("--preset",
+                   help="webcam|phone|phone_ip|dashcam|fixed_cam|cctv|ipcam|rtsp|glasses|gopro|frames "
+                        "(see docs/CAMERAS.md)")
     c.add_argument("--kind", default="file", help="synthetic|webcam|file|stream|image_dir")
     c.add_argument("--path", help="file path / stream URL / image folder")
     c.add_argument("--device", type=int, default=0, help="webcam device index")

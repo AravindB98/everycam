@@ -1,0 +1,61 @@
+name: Data contribution
+description: Contribute everyday-camera data to EveryCam (anonymized, with consent).
+title: "Data: <short-id>"
+labels: ["data-contribution"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing! **Only share footage you have the right to share**, and let EveryCam
+        blur faces/plates. The project website's contribute form can fill this in for you.
+  - type: input
+    id: handle
+    attributes:
+      label: Your GitHub handle
+    validations:
+      required: true
+  - type: input
+    id: id
+    attributes:
+      label: Short id (lowercase letters/numbers/-/_, e.g. maria-pours)
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Which camera?
+      options: [webcam, phone, dashcam, fixed_cam, glasses, other]
+    validations:
+      required: true
+  - type: input
+    id: task
+    attributes:
+      label: What activity was captured?
+    validations:
+      required: true
+  - type: dropdown
+    id: consent
+    attributes:
+      label: Consent
+      options: [self, participants-consented, public-domain, public-cc]
+    validations:
+      required: true
+  - type: dropdown
+    id: license
+    attributes:
+      label: License
+      options: [CC-BY-4.0, CC0-1.0]
+    validations:
+      required: true
+  - type: textarea
+    id: card
+    attributes:
+      label: Dataset card JSON (paste from the website form, optional)
+      render: json
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have the right to share this footage, and faces/plates are anonymized.
+          required: true

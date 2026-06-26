@@ -21,6 +21,9 @@ def test_run_and_export(tmp_path):
 
 
 def test_presets_exist():
-    for name in ("webcam", "phone", "dashcam", "fixed_cam", "cctv", "glasses"):
+    from everycam.config import PRESETS
+
+    for name in PRESETS:
         cfg = PipelineConfig.from_preset(name)
         assert cfg.privacy.blur_faces in (True, False)
+        assert cfg.source.kind in ("webcam", "file", "stream", "image_dir", "synthetic")

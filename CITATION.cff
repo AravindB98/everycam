@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use EveryCam, please cite it as below."
+title: "EveryCam: privacy-first, robot-ready embodied data from everyday cameras"
+abstract: >-
+  EveryCam turns ordinary cameras (webcam, phone, dashcam, fixed/CCTV-style, smart
+  glasses) into standardized, LeRobot-style embodied-AI datasets, with faces and
+  license plates anonymized before storage and provenance/consent recorded with the
+  data. A human hand is used as a proxy end-effector to produce imitation-learning
+  states, actions, and grasp affordances. The toolkit runs end-to-end on a CPU laptop.
+authors:
+  - family-names: Balaji
+    given-names: Aravind
+version: 0.1.0
+date-released: 2026-06-26
+license: MIT
+keywords:
+  - physical-ai
+  - embodied-ai
+  - robot-learning
+  - egocentric-video
+  - vision-language-action
+  - lerobot
+  - privacy
+repository-code: "https://github.com/AravindB98/everycam"

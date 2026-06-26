@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "everycam"
+version = "0.1.0"
+description = "Every camera is a robot teacher: turn any everyday camera (webcam, phone, dashcam, fixed/CCTV-style, smart glasses) into privacy-first, robot-ready embodied-AI data."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Aravind Balaji" }]
+keywords = [
+  "physical-ai", "embodied-ai", "robot-learning", "egocentric-video",
+  "vision-language-action", "lerobot", "world-models", "privacy",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# Core deps are intentionally tiny so EveryCam runs on ANY laptop (CPU-only).
+dependencies = [
+  "numpy>=1.23",
+  "opencv-python-headless>=4.7",
+]
+
+[project.optional-dependencies]
+# Better hand tracking (21 3D landmarks) than the built-in heuristic fallback.
+hands = ["mediapipe>=0.10"]
+# Columnar dataset export (LeRobot uses parquet). Falls back to JSONL without it.
+data = ["pandas>=1.5", "pyarrow>=12"]
+# Neural affordance/world-model head (the repo ships a numpy fallback that always runs).
+torch = ["torch>=2.0"]
+dev = ["pytest>=7", "ruff>=0.1"]
+all = ["mediapipe>=0.10", "pandas>=1.5", "pyarrow>=12", "torch>=2.0"]
+
+[project.urls]
+Homepage = "https://github.com/AravindB98/everycam"
+Issues = "https://github.com/AravindB98/everycam/issues"
+
+[project.scripts]
+everycam = "everycam.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["everycam*"]
+
+[tool.ruff]
+line-length = 100

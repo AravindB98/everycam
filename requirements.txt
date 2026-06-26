@@ -1,0 +1,9 @@
+# Core (always required) — deliberately minimal so EveryCam runs on any laptop, CPU-only.
+numpy>=1.23
+opencv-python-headless>=4.7
+
+# Optional upgrades (install the extras you want):
+#   pip install -e ".[hands]"   # MediaPipe 21-landmark hand tracking
+#   pip install -e ".[data]"    # pandas + pyarrow for parquet (LeRobot-native) export
+#   pip install -e ".[torch]"   # neural affordance / world-model head
+#   pip install -e ".[all]"     # everything

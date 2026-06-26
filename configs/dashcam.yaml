@@ -1,0 +1,26 @@
+# Example EveryCam config for a dashcam clip.
+# Load it in Python:
+#   from everycam import PipelineConfig, Pipeline
+#   cfg = PipelineConfig.from_yaml("configs/dashcam.yaml")
+#   episode, out_dir = Pipeline(cfg).run_and_export()
+source:
+  kind: file
+  path: drive.mp4
+  source_type: dashcam
+  device: dashcam
+  fps: 30
+  max_frames: 300
+privacy:
+  blur_faces: true
+  blur_plates: true     # bystander plates must go
+  method: gaussian
+  strength: 45
+perception:
+  hands: false          # driving scene: no manipulation
+  objects: true
+  ego_motion: true
+export:
+  out_dir: runs/dashcam/dataset
+  task: "egocentric driving scene"
+consent: "self"
+license: "CC-BY-4.0"

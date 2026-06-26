@@ -1,0 +1,25 @@
+# Example EveryCam config for your laptop webcam (record your own demos).
+#   from everycam import PipelineConfig, Pipeline
+#   cfg = PipelineConfig.from_yaml("configs/webcam.yaml")
+#   episode, out_dir = Pipeline(cfg).run_and_export()
+source:
+  kind: webcam
+  device_index: 0
+  source_type: webcam
+  device: laptop_webcam
+  fps: 30
+  max_frames: 200
+privacy:
+  blur_faces: true
+  blur_plates: false
+  method: gaussian
+  strength: 35
+perception:
+  hands: true
+  objects: true
+  ego_motion: true
+export:
+  out_dir: runs/webcam/dataset
+  task: "everyday manipulation demonstration"
+consent: "self"
+license: "CC-BY-4.0"

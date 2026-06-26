@@ -164,6 +164,56 @@ def cmd_backends(args) -> int:
     return 0
 
 
+def cmd_contribute(args) -> int:
+    from .contrib import build_contribution, register
+
+    try:
+        card = build_contribution(
+            args.dataset, id=args.id, title=args.title, contributor=args.contributor,
+            device=args.device, task=args.task, consent=args.consent, license=args.license,
+            data_mode=args.data_mode, data_url=args.data_url, registry_dir=args.registry,
+            attest_rights=args.i_have_rights, notes=args.notes or "",
+        )
+    except (PermissionError, ValueError) as e:
+        print(f"[everycam] contribution rejected:\n{e}")
+        return 2
+    register(card, registry_dir=args.registry)
+    print(f"[everycam] '{card.id}' added to {args.registry}/datasets.jsonl "
+          f"({card.num_frames} frames, device={card.device}, consent={card.consent})")
+    if card.data_mode == "in_repo":
+        print(f"[everycam] signal bundle (no images): {args.registry}/{card.data_path}/")
+    print("[everycam] next: open a PR ->")
+    print(f"  git checkout -b add-{card.id} && git add {args.registry} && "
+          f"git commit -m 'data: add {card.id}' && git push")
+    print("  CI validates it, a maintainer reviews, then it's listed in the registry.")
+    return 0
+
+
+def cmd_validate(args) -> int:
+    from .contrib import validate_card, validate_registry
+
+    if args.card:
+        with open(args.card) as f:
+            errs = validate_card(json.load(f))
+        n = 1
+    else:
+        n, errs = validate_registry(args.registry)
+    if errs:
+        print(f"[everycam] {len(errs)} problem(s) across {n} entr(ies):")
+        for e in errs:
+            print("  -", e)
+        return 1
+    print(f"[everycam] OK — {n} registry entr{'y' if n == 1 else 'ies'} valid.")
+    return 0
+
+
+def cmd_analyze(args) -> int:
+    from .contrib import analyze_dataset
+
+    print(json.dumps(analyze_dataset(args.dataset, out_dir=args.out, train=not args.no_train), indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="everycam", description=f"EveryCam — {__slogan__}")
     p.add_argument("--version", action="version", version=f"everycam {__version__}")
@@ -206,6 +256,36 @@ def build_parser() -> argparse.ArgumentParser:
 
     bk = sub.add_parser("backends", help="show which optional backends are installed")
     bk.set_defaults(func=cmd_backends)
+
+    co = sub.add_parser("contribute", help="package a captured dataset into a registry contribution")
+    co.add_argument("--dataset", required=True, help="exported EveryCam dataset dir (from `everycam capture`)")
+    co.add_argument("--id", required=True, help="unique slug, e.g. my-kitchen-pours")
+    co.add_argument("--title", required=True)
+    co.add_argument("--contributor", required=True, help="your GitHub handle or name")
+    co.add_argument("--device", required=True,
+                    choices=["webcam", "phone", "dashcam", "fixed_cam", "glasses", "other"])
+    co.add_argument("--task", required=True, help="what activity was captured")
+    co.add_argument("--consent", required=True,
+                    help="self | participants-consented | public-domain | public-cc")
+    co.add_argument("--license", required=True, help="e.g. CC-BY-4.0, CC0-1.0")
+    co.add_argument("--data-mode", dest="data_mode", required=True, choices=["hosted", "in_repo"])
+    co.add_argument("--data-url", dest="data_url", help="hosted: https link to your anonymized dataset")
+    co.add_argument("--i-have-rights", dest="i_have_rights", action="store_true",
+                    help="attest you have the rights/consent to share this footage (required)")
+    co.add_argument("--registry", default="registry")
+    co.add_argument("--notes", default="")
+    co.set_defaults(func=cmd_contribute)
+
+    va = sub.add_parser("validate", help="validate the contribution registry (or one card)")
+    va.add_argument("--registry", default="registry")
+    va.add_argument("--card", help="validate a single card JSON file instead of the registry")
+    va.set_defaults(func=cmd_validate)
+
+    an = sub.add_parser("analyze", help="stats + model eval on any dataset (real or synthetic)")
+    an.add_argument("dataset")
+    an.add_argument("--out", default=None)
+    an.add_argument("--no-train", dest="no_train", action="store_true", help="skip model eval")
+    an.set_defaults(func=cmd_analyze)
     return p
 
 

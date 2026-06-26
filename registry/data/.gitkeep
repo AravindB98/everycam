@@ -1,0 +1,2 @@
+# In-repo signal bundles live here, one folder per contribution id.
+# Signals only (states/actions/affordances/contact) — never raw frames.

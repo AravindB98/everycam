@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EveryCam DatasetCard",
+  "description": "One contributed dataset entry in registry/datasets.jsonl",
+  "type": "object",
+  "required": ["id", "title", "contributor", "device", "task", "consent", "license", "anonymized", "data_mode"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,48}$"},
+    "title": {"type": "string"},
+    "contributor": {"type": "string"},
+    "device": {"enum": ["webcam", "phone", "dashcam", "fixed_cam", "glasses", "other"]},
+    "task": {"type": "string"},
+    "consent": {"enum": ["self", "participants-consented", "public-domain", "public-cc", "synthetic"]},
+    "license": {"type": "string"},
+    "anonymized": {"const": true},
+    "data_mode": {"enum": ["hosted", "in_repo"]},
+    "data_url": {"type": ["string", "null"]},
+    "data_path": {"type": ["string", "null"]},
+    "num_episodes": {"type": "integer", "minimum": 0},
+    "num_frames": {"type": "integer", "minimum": 0},
+    "notes": {"type": "string"},
+    "schema_version": {"type": "string"}
+  }
+}

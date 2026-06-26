@@ -182,6 +182,27 @@ anonymization ran. EveryCam has **no** capability to identify, match, or track i
 
 ---
 
+## Contribute real data from your device
+
+EveryCam is built to grow from a synthetic demo into an **open, community-sourced** dataset of
+everyday-camera embodied data — and you can add to it from your own webcam, phone, dashcam, or
+glasses. Contribution is **consent-gated**: every submission must carry consent, a license, and
+`anonymized: true`, or it is rejected.
+
+```bash
+everycam capture --preset webcam --out runs/mine/dataset     # anonymized capture
+everycam analyze runs/mine/dataset                           # stats + quick model eval
+everycam contribute --dataset runs/mine/dataset --id my-pours \
+  --title "Pouring water" --contributor <you> --device webcam \
+  --task "pour water" --consent self --license CC-BY-4.0 \
+  --data-mode in_repo --i-have-rights                        # then open a PR
+```
+
+Contributions live in a [`registry/`](registry/) (designed so a web upload portal can sit on top
+later) in two forms: **hosted** (publish your anonymized data to Hugging Face/Zenodo and register
+a link) or **in_repo** (a tiny *signals-only* bundle — never raw frames). A CI workflow runs
+`everycam validate` on every data PR. Full guide: [CONTRIBUTING-DATA.md](CONTRIBUTING-DATA.md).
+
 ## Dataset format
 
 EveryCam writes a [LeRobot](https://github.com/huggingface/lerobot)-style layout so it drops into that ecosystem:
@@ -205,6 +226,7 @@ Key features: `observation.state = [ee_x, ee_y, contact]`, `action = [dx, dy, dc
 
 ## Roadmap
 
+- [x] Community data registry + consent-gated `contribute` / `validate` (real device data)
 - [x] Multi-device generalization benchmark (`everycam benchmark`)
 - [x] MediaPipe hand backend (`--hands mediapipe`) — 6-DoF proxy actions next
 - [ ] Monocular depth (Depth-Anything) → 3D affordances
@@ -221,8 +243,9 @@ EveryCam is positioned as the **commodity-camera, privacy-first capture layer** 
 
 ## Contributing
 
-Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Good first issues: new source adapters,
-a DNN privacy backend, and the LeRobot video exporter.
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for code, and
+[CONTRIBUTING-DATA.md](CONTRIBUTING-DATA.md) to contribute **real data from your device**. Good
+first issues: new source adapters, a DNN privacy backend, and the LeRobot video exporter.
 
 ## Citation
 

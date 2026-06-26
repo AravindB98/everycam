@@ -1,0 +1,4 @@
+# EveryCam contribution registry — one JSON object per line (a DatasetCard).
+# Add yours automatically with:  everycam contribute ...   (it appends here), then open a PR.
+# Lines starting with '#' are ignored. Example format (remove the leading '# ' for a real entry):
+# {"id":"my-kitchen-pours","title":"Pouring water, 20 clips","contributor":"AravindB98","device":"phone","task":"pour water into a cup","consent":"self","license":"CC-BY-4.0","anonymized":true,"data_mode":"hosted","data_url":"https://huggingface.co/datasets/AravindB98/my-kitchen-pours","num_episodes":20,"num_frames":1200,"schema_version":"0.1.0"}

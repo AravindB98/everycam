@@ -94,6 +94,8 @@ def cmd_capture(args) -> int:
             source_type=(args.kind if args.kind != "file" else "file"),
         )
     cfg.source.max_frames = args.max_frames
+    if getattr(args, "hands", None):
+        cfg.perception.hand_backend = args.hands  # auto|mediapipe|heuristic|none
     if args.out:
         cfg.export.out_dir = args.out
 
@@ -127,6 +129,41 @@ def cmd_info(args) -> int:
     return 0
 
 
+def cmd_benchmark(args) -> int:
+    from .benchmark import run_benchmark
+
+    print("[everycam] running cross-device generalization benchmark "
+          f"({args.episodes} episodes/device, {args.epochs} epochs, CPU)")
+    s = run_benchmark(episodes=args.episodes, frames=args.frames, epochs=args.epochs, out_dir=args.out)
+    print(json.dumps({k: s[k] for k in (
+        "devices", "in_device_grasp_mae", "cross_device_grasp_mae", "generalization_gap")}, indent=2))
+    ratio = s["cross_device_grasp_mae"] / max(s["in_device_grasp_mae"], 1e-9)
+    print(f"[everycam] cross-device grasp error is {ratio:.1f}x the in-device error "
+          f"— the 'brittle grounding' gap. Matrix + heatmap in {args.out}")
+    return 0
+
+
+def cmd_backends(args) -> int:
+    def _ok(mod):
+        try:
+            __import__(mod)
+            return True
+        except Exception:
+            return False
+
+    rows = {
+        "opencv (core)": _ok("cv2"),
+        "mediapipe (3D hand tracking)": _ok("mediapipe"),
+        "pandas + pyarrow (parquet export)": _ok("pandas") and _ok("pyarrow"),
+        "torch (neural model head)": _ok("torch"),
+    }
+    print("EveryCam optional backends:")
+    for name, ok in rows.items():
+        print(f"  [{'x' if ok else ' '}] {name}")
+    print("\nThe core runs on numpy + opencv alone; the rest are optional upgrades.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="everycam", description=f"EveryCam — {__slogan__}")
     p.add_argument("--version", action="version", version=f"everycam {__version__}")
@@ -144,6 +181,8 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--kind", default="file", help="synthetic|webcam|file|stream|image_dir")
     c.add_argument("--path", help="file path / stream URL / image folder")
     c.add_argument("--device", type=int, default=0, help="webcam device index")
+    c.add_argument("--hands", choices=["auto", "mediapipe", "heuristic", "none"],
+                   default="auto", help="hand backend (auto picks MediaPipe if installed)")
     c.add_argument("--max-frames", dest="max_frames", type=int, default=150)
     c.add_argument("--out", default="runs/capture/dataset")
     c.set_defaults(func=cmd_capture)
@@ -157,6 +196,16 @@ def build_parser() -> argparse.ArgumentParser:
     i = sub.add_parser("info", help="print dataset schema + provenance")
     i.add_argument("dataset")
     i.set_defaults(func=cmd_info)
+
+    b = sub.add_parser("benchmark", help="cross-device generalization benchmark (no hardware)")
+    b.add_argument("--episodes", type=int, default=8)
+    b.add_argument("--frames", type=int, default=40)
+    b.add_argument("--epochs", type=int, default=250)
+    b.add_argument("--out", default="runs/benchmark")
+    b.set_defaults(func=cmd_benchmark)
+
+    bk = sub.add_parser("backends", help="show which optional backends are installed")
+    bk.set_defaults(func=cmd_backends)
     return p
 
 

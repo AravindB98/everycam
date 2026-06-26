@@ -99,7 +99,9 @@ Use real footage instead:
 everycam capture --preset webcam                      # your laptop camera
 everycam capture --preset dashcam --path drive.mp4    # a dashcam clip
 everycam capture --kind stream  --path rtsp://CAM/ID  # a fixed / CCTV-style camera
+everycam capture --preset webcam --hands mediapipe    # 3D hand tracking (pip install -e ".[hands]")
 everycam info  runs/capture/dataset                   # schema + provenance
+everycam backends                                     # which optional backends are installed
 ```
 
 Optional upgrades (the core never requires them):
@@ -149,6 +151,26 @@ Predicted grasp (red) vs. ground-truth grasp (green) on held-out frames:
 
 ---
 
+## Multi-device generalization benchmark
+
+Real deployments capture the same action on very different cameras. EveryCam ships a
+**cross-device benchmark** that simulates five device domains (webcam, phone, dashcam,
+fixed/CCTV, glasses), trains the affordance model on each, and tests it on all of them —
+putting a number on the *generalization gap* that egocentric robot learning keeps hitting.
+
+```bash
+everycam benchmark        # no hardware; builds the transfer matrix below
+```
+
+![cross-device transfer matrix](docs/assets/benchmark_matrix.png)
+
+On the synthetic benchmark, in-device grasp error is **~0.03** but cross-device error is
+**~0.19 — roughly 6× worse** when the train and test cameras differ. The structure is
+intuitive: webcam / phone / glasses transfer reasonably to one another, while the dashcam
+(motion blur + low contrast) and fixed/CCTV (desaturated, low-res, noisy) domains are far
+harder. That gap is exactly the open problem a domain-robust capture layer should attack —
+and now there's a number to drive down.
+
 ## Privacy by design
 
 ![privacy demo](docs/assets/privacy_demo.png)
@@ -183,12 +205,12 @@ Key features: `observation.state = [ee_x, ee_y, contact]`, `action = [dx, dy, dc
 
 ## Roadmap
 
-- [ ] MediaPipe-default 3D hand pose + 6-DoF proxy end-effector actions
+- [x] Multi-device generalization benchmark (`everycam benchmark`)
+- [x] MediaPipe hand backend (`--hands mediapipe`) — 6-DoF proxy actions next
 - [ ] Monocular depth (Depth-Anything) → 3D affordances
 - [ ] Native LeRobot `mp4`-video export + one-line `LeRobotDataset` loader
 - [ ] DNN face/plate detector option for the privacy gate
 - [ ] A small **world-model** head (predict next latent from action) over the same dataset
-- [ ] Multi-device generalization benchmark (webcam ↔ phone ↔ dashcam ↔ fixed-cam)
 
 ---
 

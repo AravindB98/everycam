@@ -24,3 +24,9 @@ def test_info_command(demo_dataset, capsys):
     rc = main(["info", demo_dataset])
     assert rc == 0
     assert "total_episodes" in capsys.readouterr().out
+
+
+def test_backends_command(capsys):
+    rc = main(["backends"])
+    assert rc == 0
+    assert "opencv" in capsys.readouterr().out

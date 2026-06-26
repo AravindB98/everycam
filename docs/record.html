@@ -62,7 +62,8 @@
     <div class="btns"><button class="go" id="startBtn">Start camera &amp; record</button></div>
     <div class="vidwrap"><video id="video" playsinline muted></video><div id="dot"></div></div>
     <div class="bar"><i id="prog"></i></div>
-    <div class="status" id="status">Fill in the boxes, tick the box, then press start.</div>
+    <div class="status" id="status">Open via the live site or <code>http://localhost</code> (not a
+      <code>file://</code> page), then fill in the boxes, tick the box, and press start.</div>
   </div>
 
   <div class="panel" id="results" style="display:none">
@@ -96,9 +97,34 @@ function myId(){ return slug(($('handle').value||'me')+'-'+($('task').value||'cl
 
 async function start(){
   if(!$('attest').checked) return;
+  if(!window.isSecureContext){
+    $('status').innerHTML = "🔒 The camera only works on a secure page (https) or localhost — you're on "
+      + "<code>"+location.protocol+"</code>. Run a local server:<br>"
+      + "<code>cd docs &amp;&amp; python3 -m http.server 8000</code><br>then open "
+      + "<a href='http://localhost:8000/record.html'>http://localhost:8000/record.html</a>, "
+      + "or use the live website once it's public.";
+    return;
+  }
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){
+    $('status').textContent = "This browser can't access the camera. Try Chrome, Edge, or Safari.";
+    return;
+  }
   try{
     stream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}, audio:false});
-  }catch(e){ $('status').textContent = "Couldn't open the camera: "+e.message+". Check camera permission."; return; }
+  }catch(e){
+    let msg;
+    if(e.name==='NotAllowedError' || e.name==='SecurityError')
+      msg="Camera permission was blocked. Click the camera icon in the address bar to Allow it — and on "
+        + "macOS, enable your browser under System Settings → Privacy &amp; Security → Camera, then reload.";
+    else if(e.name==='NotFoundError' || e.name==='DevicesNotFoundError')
+      msg="No camera was found on this device.";
+    else if(e.name==='NotReadableError' || e.name==='TrackStartError')
+      msg="The camera is in use by another app. Close it (Zoom, Photo Booth, etc.) and retry.";
+    else
+      msg="Couldn't open the camera ("+(e.name||'error')+"): "+e.message;
+    $('status').innerHTML = "⚠️ "+msg;
+    return;
+  }
   const v=$('video'); v.srcObject=stream; await v.play();
   $('startBtn').disabled=true; $('results').style.display='none';
   traj=[]; prev=null;

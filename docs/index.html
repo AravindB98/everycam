@@ -1,248 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>EveryCam — every camera is a robot teacher</title>
-<meta name="description" content="Turn everyday camera videos into privacy-first lessons that robots can learn from." />
-<meta name="theme-color" content="#0d1117" />
-<link rel="manifest" href="manifest.webmanifest" />
-<link rel="apple-touch-icon" href="icon-192.png" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>everycam — Every camera is a robot teacher</title>
+<meta name="description" content="Every camera is a robot teacher — privacy-first, robot-ready embodied data from everyday cameras.">
 <style>
-  :root{ --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa4af; --line:#283039;
-         --accent:#6ea8fe; --accent2:#3fb950; --pink:#f778ba; --radius:16px; }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-       background:var(--bg);color:var(--ink);line-height:1.6}
-  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
-  header.hero{padding:64px 20px 36px;text-align:center;
-    background:radial-gradient(1200px 400px at 50% -10%, #1b2330 0%, var(--bg) 60%)}
-  .hero h1{font-size:48px;margin:0 0 6px;letter-spacing:-1px}
-  .hero .slogan{color:var(--accent);font-size:20px;font-weight:600;margin:0 0 14px}
-  .hero p{max-width:680px;margin:0 auto 22px;color:var(--muted);font-size:18px}
-  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{display:inline-block;padding:11px 18px;border-radius:999px;font-weight:600;border:1px solid var(--line)}
-  .btn.primary{background:var(--accent);color:#08111f;border-color:transparent}
-  .btn.green{background:var(--accent2);color:#06210f;border-color:transparent}
-  section{padding:40px 0;border-top:1px solid var(--line)}
-  h2{font-size:28px;margin:0 0 6px} .lead{color:var(--muted);margin:0 0 22px;font-size:17px}
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
-  .step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
-  .step .n{font-size:22px} .step b{display:block;margin:6px 0 2px}
-  .step small{color:var(--muted)}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
-  .card b{color:var(--ink)} .card p{margin:6px 0 0;color:var(--muted);font-size:15px}
-  img.full{width:100%;border-radius:var(--radius);border:1px solid var(--line);background:#0b0f14}
-  .note{background:rgba(247,120,186,.08);border:1px solid rgba(247,120,186,.35);
-        border-radius:var(--radius);padding:16px;color:#ffd9ee}
-  form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-  label{display:block;font-weight:600;margin:14px 0 6px}
-  input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
-    background:#0b0f14;color:var(--ink);font-size:15px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .check{display:flex;gap:10px;align-items:flex-start;margin:16px 0;color:var(--muted)}
-  .check input{width:auto;margin-top:5px}
-  .formbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-  button{cursor:pointer;padding:11px 16px;border-radius:10px;border:1px solid var(--line);
-    background:#0b0f14;color:var(--ink);font-weight:600;font-size:15px}
-  button.go{background:var(--accent2);color:#06210f;border-color:transparent}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  pre{background:#0b0f14;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:13px}
-  footer{padding:30px 0 60px;color:var(--muted);text-align:center;font-size:14px}
-  @media(max-width:560px){.hero h1{font-size:36px}.row{grid-template-columns:1fr}}
+:root{--accent:#4dd0e1;--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.65}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:72px 0 48px;text-align:center;background:radial-gradient(ellipse at top,color-mix(in srgb,var(--accent) 18%,transparent),transparent 65%)}
+h1{font-size:2.6rem;margin-bottom:8px}
+.emoji{font-size:3.2rem;display:block;margin-bottom:12px}
+.tagline{color:var(--muted);font-size:1.15rem;max-width:640px;margin:0 auto 24px}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.95rem}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{border:1px solid var(--border);color:var(--text)}
+section{padding:40px 0;border-top:1px solid var(--border)}
+h2{font-size:1.5rem;margin-bottom:16px;color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;margin:4px;font-size:.88rem}
+ul.apps{list-style:none}ul.apps li{padding:8px 0 8px 28px;position:relative}
+ul.apps li:before{content:"✦";position:absolute;left:4px;color:var(--accent)}
+#demo{margin-top:8px}
+.demo-hint{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+button.demo-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:600;cursor:pointer;font-size:.92rem;margin:4px 6px 4px 0}
+button.demo-btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+input[type=range]{accent-color:var(--accent)}
+canvas{background:#0a0e14;border:1px solid var(--border);border-radius:8px;max-width:100%}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:.85rem}
+footer{padding:36px 0;text-align:center;color:var(--muted);font-size:.9rem}
+footer a{color:var(--accent);text-decoration:none}
+.star-cta{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 25%,var(--card)),var(--card));border:1px solid var(--accent);border-radius:12px;padding:24px;text-align:center;margin-top:8px}
 </style>
 </head>
 <body>
-
-<header class="hero">
-  <h1>EveryCam</h1>
-  <p class="slogan">Every camera is a robot teacher.</p>
-  <p>Turn ordinary videos — your webcam, phone, dashcam, or smart glasses — into privacy-first
-     "lessons" that robots can learn from. Faces are blurred automatically. It's free and open-source.</p>
-  <div class="btns">
-    <a class="btn green" href="record.html">🎥 Record from your camera</a>
-    <a class="btn primary" href="#what">What is this?</a>
-    <a class="btn" href="#contribute">Contribute data</a>
-    <a class="btn" href="https://github.com/AravindB98/everycam">GitHub</a>
-  </div>
-  <p style="color:var(--muted);font-size:14px;margin-top:12px">Tip: on phone or desktop you can <b>install this as an app</b> — look for "Add to Home Screen" / the install icon in your browser.</p>
-</header>
-
-<main class="wrap">
-
-  <section id="what">
-    <h2>What is EveryCam? 🤖</h2>
-    <p class="lead">In one sentence — and no jargon.</p>
-    <p>Robots are great at repeating one factory task, but surprisingly <b>bad</b> at simple things you do
-    without thinking: picking up a cup, folding a shirt, opening a drawer. To learn a physical skill, a robot
-    needs <b>thousands of examples</b>, and collecting those with real robots is slow and expensive.</p>
-    <p>But humans already do these tasks all day, on camera. EveryCam turns "a human hand doing a thing in a
-    video" into something a robot can read — so robots can learn from <b>us</b>, using cheap everyday cameras
-    instead of costly robot farms. And it protects privacy by blurring faces <b>before</b> anything is saved.</p>
-    <p><a href="EXPLAINER.md">Read the full plain-English explainer →</a></p>
-  </section>
-
-  <section id="how">
-    <h2>How it works</h2>
-    <p class="lead">An assembly line for a video clip.</p>
-    <div class="steps">
-      <div class="step"><div class="n">📷</div><b>1. Camera</b><small>any everyday camera, live or a file</small></div>
-      <div class="step"><div class="n">🕶️</div><b>2. Privacy first</b><small>blur faces & plates before saving</small></div>
-      <div class="step"><div class="n">✋</div><b>3. Look</b><small>find the hand and objects</small></div>
-      <div class="step"><div class="n">➡️</div><b>4. Translate</b><small>hand motion → robot actions + grab points</small></div>
-      <div class="step"><div class="n">📦</div><b>5. Save & learn</b><small>tidy dataset; a small AI learns from it</small></div>
-    </div>
-    <p style="margin-top:18px"><img class="full" src="assets/pipeline.svg" alt="EveryCam pipeline" /></p>
-  </section>
-
-  <section id="tech">
-    <h2>The technologies, in plain words</h2>
-    <p class="lead">You'll see these terms around the project — here's what they actually mean.</p>
-    <div class="cards">
-      <div class="card"><b>Physical / Embodied AI</b><p>AI that acts in the real world (robots), not just text on a screen.</p></div>
-      <div class="card"><b>Computer vision</b><p>Teaching computers to "see" — find hands, objects, and motion in pictures.</p></div>
-      <div class="card"><b>Hand tracking</b><p>Software (e.g. MediaPipe) that locates the points of a hand in a video.</p></div>
-      <div class="card"><b>Affordance</b><p>A fancy word for "where do I grab this / what can I do with it?"</p></div>
-      <div class="card"><b>Imitation learning</b><p>A robot learning by copying a demonstration — like learning a dance by watching.</p></div>
-      <div class="card"><b>Dataset (LeRobot)</b><p>A neat pile of examples used to train AI, saved in a format robot tools can read.</p></div>
-      <div class="card"><b>Anonymization</b><p>Removing things that identify a person — here, blurring faces and plates.</p></div>
-      <div class="card"><b>Open source / PR</b><p>Free public code; a "pull request" is a polite proposal to add your change.</p></div>
-    </div>
-  </section>
-
-  <section id="privacy">
-    <h2>Privacy comes first 🛡️</h2>
-    <div class="note">
-      EveryCam blurs faces and license plates <b>before</b> a frame is ever saved, and has <b>no ability
-      to recognize or track people</b>. If you contribute the lightweight way, only the <b>numbers</b>
-      (where the hand moved) are shared — never the actual video of people.
-    </div>
-  </section>
-
-  <section id="contribute">
-    <h2>Contribute your data (no coding needed)</h2>
-    <p class="lead">Fill this in to create a "dataset card" and open a pre-filled GitHub issue. A maintainer
-      adds it to the project. <b>Only share videos you have the right to share.</b></p>
-    <form onsubmit="return false">
-      <div class="row">
-        <div><label for="handle">Your GitHub handle</label><input id="handle" placeholder="e.g. AravindB98" /></div>
-        <div><label for="id">Short id (lowercase)</label><input id="id" placeholder="e.g. maria-pours-water" /></div>
-      </div>
-      <label for="title">Title</label><input id="title" placeholder="e.g. Pouring water, 20 clips" />
-      <div class="row">
-        <div><label for="device">Which camera?</label>
-          <select id="device">
-            <option value="webcam">Webcam (laptop)</option>
-            <option value="phone">Phone</option>
-            <option value="dashcam">Dashcam</option>
-            <option value="fixed_cam">Fixed / CCTV-style</option>
-            <option value="glasses">Smart glasses</option>
-            <option value="other">Other</option>
-          </select></div>
-        <div><label for="task">What activity?</label><input id="task" placeholder="e.g. pour water into a cup" /></div>
-      </div>
-      <div class="row">
-        <div><label for="consent">Consent</label>
-          <select id="consent">
-            <option value="self">It's only me on camera</option>
-            <option value="participants-consented">Everyone filmed gave consent</option>
-            <option value="public-domain">Public-domain source</option>
-            <option value="public-cc">Permissively-licensed public source</option>
-          </select></div>
-        <div><label for="license">License</label>
-          <select id="license">
-            <option value="CC-BY-4.0">CC-BY-4.0 (credit me)</option>
-            <option value="CC0-1.0">CC0-1.0 (anyone can use freely)</option>
-          </select></div>
-      </div>
-      <label>How will you share the data?</label>
-      <div style="color:var(--muted);font-size:15px">
-        <label class="check"><input type="radio" name="mode" value="in_repo" checked />
-          <span><b>Signals only</b> — run the EveryCam tool; it uploads just the numbers, no video. (Recommended)</span></label>
-        <label class="check"><input type="radio" name="mode" value="hosted" id="mode-hosted" />
-          <span><b>Hosted link</b> — I published my anonymized dataset somewhere (e.g. Hugging Face) and have a link.</span></label>
-      </div>
-      <div id="urlbox" style="display:none"><label for="dataurl">Link to your anonymized dataset (https)</label>
-        <input id="dataurl" placeholder="https://huggingface.co/datasets/..." /></div>
-
-      <label class="check"><input type="checkbox" id="attest" />
-        <span>I confirm I have the right to share this footage, everyone in it is me or consented, and I'll let
-          EveryCam blur faces/plates. (required)</span></label>
-
-      <div class="formbtns">
-        <button class="go" id="issueBtn" disabled onclick="openIssue()">Generate &amp; open a GitHub issue</button>
-        <button onclick="copyJson()">Copy the card (JSON)</button>
-        <button onclick="copyCli()">Copy the tool command</button>
-      </div>
-      <pre id="preview" style="margin-top:14px;display:none"></pre>
-    </form>
-    <p style="margin-top:14px;color:var(--muted)">Prefer the command line? See
-      <a href="https://github.com/AravindB98/everycam/blob/main/CONTRIBUTING-DATA.md">CONTRIBUTING-DATA.md</a>
-      or run <code>bash scripts/webcam_contribute.sh</code>.</p>
-  </section>
-
-</main>
-
-<footer>
-  EveryCam · MIT licensed · made by <a href="https://github.com/AravindB98">AravindB98</a> ·
-  <a href="https://github.com/AravindB98/everycam">GitHub</a>
-</footer>
-
+<header><div class="wrap">
+<span class="emoji">📷</span>
+<h1>everycam</h1>
+<p class="tagline">Every camera is a robot teacher — privacy-first, robot-ready embodied data from everyday cameras.</p>
+<div class="btns">
+<a class="btn btn-primary" href="https://github.com/AravindB98/everycam">View on GitHub</a>
+<a class="btn btn-ghost" href="#demo-sec">▶ Try the Demo</a>
+</div>
+</div></header>
+<div class="wrap">
+<section><h2>🧒 What is this? (Plain English)</h2><div class="card"><p>Robots learn by watching — but robot training videos are rare and expensive. Everycam's idea: the world is already full of cameras (phones, webcams, CCTV). It turns ordinary camera footage into privacy-safe, robot-ready training data, so every camera becomes a robot teacher.</p></div></section>
+<section><h2>✨ Key Features</h2><div class="grid"><div class="card"><strong>Privacy-first</strong><p style="color:var(--muted);margin-top:6px">Faces and backgrounds are redacted before anything leaves the device.</p></div><div class="card"><strong>Pose & action extraction</strong><p style="color:var(--muted);margin-top:6px">Ordinary video becomes structured motion data.</p></div><div class="card"><strong>Robot-ready formats</strong><p style="color:var(--muted);margin-top:6px">Exports in formats robot-learning pipelines consume directly.</p></div><div class="card"><strong>Scale from what exists</strong><p style="color:var(--muted);margin-top:6px">Phones, webcams, CCTV — the sensors are already everywhere.</p></div></div></section>
+<section id="demo-sec"><h2>🕹️ Interactive Demo</h2>
+<p class="demo-hint">A camera feed becomes robot training data: toggle privacy mode and watch frames export. <em>(Illustrative in-browser simulation of what the real system does.)</em></p>
+<div class="card" id="demo"><canvas id="ec-c" width="880" height="300"></canvas>
+<div style="margin-top:10px"><button class="demo-btn ghost" id="ec-p" onclick="ecPriv=!ecPriv;this.textContent=ecPriv?'🔓 Privacy mode: ON':'🔒 Privacy mode: OFF'">🔒 Privacy mode: OFF</button>
+<span class="mono" style="color:var(--muted)"> robot-ready frames exported: <span id="ec-n" style="color:var(--accent)">0</span></span></div></div></section>
+<section><h2>🧰 Tech Stack</h2><div><span class="chip">Python</span><span class="chip">privacy-first video processing (on-device redaction)</span><span class="chip">pose & action extraction</span><span class="chip">robot-learning-ready data formats</span></div></section>
+<section><h2>🌍 Real-Life Applications</h2><ul class="apps"><li>Scaling up training data for household and warehouse robots</li><li>Privacy-preserving activity datasets for embodied-AI research</li><li>Turning existing camera infrastructure into a data asset</li></ul></section>
+<section><h2>⭐ Support the Project</h2><div class="star-cta">
+<p style="margin-bottom:14px">If this project is useful or interesting to you, <strong>starring ⭐ and forking 🍴 the repo</strong> is the best way to support it and help others find it.</p>
+<div class="btns">
+<a class="btn btn-primary" href="https://github.com/AravindB98/everycam/stargazers">⭐ Star</a>
+<a class="btn btn-ghost" href="https://github.com/AravindB98/everycam/fork">🍴 Fork</a>
+<a class="btn btn-ghost" href="https://github.com/AravindB98/everycam/issues">💬 Contribute</a>
+</div></div></section>
+</div>
+<footer>Built by <a href="https://github.com/AravindB98">Aravind Balaji</a> · <a href="https://aravindbalaji.com">aravindbalaji.com</a> · <a href="https://medium.com/@aravindbalaji25">Medium</a></footer>
 <script>
-  var REPO = "AravindB98/everycam";
-  var attest = document.getElementById('attest');
-  var issueBtn = document.getElementById('issueBtn');
-  attest.addEventListener('change', function(){ issueBtn.disabled = !attest.checked; });
-  document.querySelectorAll('input[name=mode]').forEach(function(r){
-    r.addEventListener('change', function(){
-      document.getElementById('urlbox').style.display =
-        document.querySelector('input[name=mode]:checked').value === 'hosted' ? 'block' : 'none';
-    });
-  });
-  function val(id){ var e=document.getElementById(id); return e ? e.value.trim() : ''; }
-  function buildCard(){
-    var mode = document.querySelector('input[name=mode]:checked').value;
-    var card = { id: val('id'), title: val('title'), contributor: val('handle'),
-      device: val('device'), task: val('task'), consent: val('consent'),
-      license: val('license'), anonymized: true, data_mode: mode, schema_version: "0.1.0" };
-    if(mode==='hosted') card.data_url = val('dataurl');
-    return card;
-  }
-  function problems(c){
-    var e=[];
-    if(!/^[a-z0-9][a-z0-9_-]{2,48}$/.test(c.id)) e.push("id must be lowercase letters/numbers/-/_ (3+ chars)");
-    ["title","contributor","task"].forEach(function(k){ if(!c[k]) e.push("please fill in "+k); });
-    if(c.data_mode==='hosted' && !(c.data_url||'').startsWith('https://')) e.push("please add an https link to your data");
-    return e;
-  }
-  function show(card){ var p=document.getElementById('preview'); p.style.display='block';
-    p.textContent = JSON.stringify(card,null,2); }
-  function openIssue(){
-    if(!attest.checked){ alert("Please confirm you have the right to share this data."); return; }
-    var c=buildCard(), errs=problems(c);
-    if(errs.length){ alert("Please fix:\n- "+errs.join("\n- ")); return; }
-    show(c);
-    var body = "### New data contribution\n\nThanks for contributing to EveryCam! A maintainer will review and add this.\n\n"
-      + "```json\n"+JSON.stringify(c,null,2)+"\n```\n\n"
-      + "- [x] I have the right to share this footage; faces/plates are anonymized.\n"
-      + (c.data_mode==='in_repo'
-          ? "- [ ] I will run `everycam contribute ... --data-mode in_repo --i-have-rights` to attach the signals.\n"
-          : "- [ ] Data is published at the link above.\n");
-    var url = "https://github.com/"+REPO+"/issues/new?labels=data-contribution&title="
-      + encodeURIComponent("Data: "+c.id) + "&body=" + encodeURIComponent(body);
-    window.open(url,"_blank");
-  }
-  function copyJson(){ var c=buildCard(); show(c);
-    navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(c)); }
-  function copyCli(){ var c=buildCard(); show(c);
-    var cmd = "everycam contribute --dataset runs/"+(c.id||'my')+"/dataset --id "+(c.id||'my-id')
-      + " --title \""+(c.title||'My clip')+"\" --contributor "+(c.contributor||'me')
-      + " --device "+c.device+" --task \""+(c.task||'task')+"\" --consent "+c.consent
-      + " --license "+c.license+" --data-mode "+c.data_mode+" --i-have-rights";
-    navigator.clipboard && navigator.clipboard.writeText(cmd); }
+
+const ec=document.getElementById('ec-c'),ectx=ec.getContext('2d');let ecPriv=false,ph=0,nf=0;
+function ecStep(){ph+=0.06;ectx.fillStyle='#0a0e14';ectx.fillRect(0,0,880,300);
+if(!ecPriv){ectx.fillStyle='#1a2332';ectx.fillRect(0,220,880,80);ectx.fillStyle='#20304a';ectx.fillRect(600,80,180,140);ectx.fillStyle='#8b949e';ectx.font='11px monospace';ectx.fillText('window',660,150);ectx.fillText('floor',60,265);}
+else{for(let i=0;i<20;i++){ectx.fillStyle='#141a22';ectx.fillRect((i*97)%840,(i*61)%260,44,26);}ectx.fillStyle='#4dd0e1';ectx.font='11px monospace';ectx.fillText('background redacted · faces dropped on-device',20,20);}
+const x=200+80*Math.sin(ph*0.5),y=140;const sw=Math.sin(ph),hip={x:x,y:y+40};
+ectx.strokeStyle='#4dd0e1';ectx.lineWidth=3;ectx.beginPath();
+ectx.arc(x,y-38,14,0,7);ectx.moveTo(x,y-24);ectx.lineTo(hip.x,hip.y);
+ectx.moveTo(x,y-14);ectx.lineTo(x-26*Math.cos(sw),y+8+8*Math.sin(sw));
+ectx.moveTo(x,y-14);ectx.lineTo(x+26*Math.cos(sw),y+8-8*Math.sin(sw));
+ectx.moveTo(hip.x,hip.y);ectx.lineTo(hip.x-18*Math.sin(sw),hip.y+52);
+ectx.moveTo(hip.x,hip.y);ectx.lineTo(hip.x+18*Math.sin(sw),hip.y+52);ectx.stroke();
+[[x,y-38],[x,y-14],[hip.x,hip.y]].forEach(p=>{ectx.fillStyle='#ffd166';ectx.fillRect(p[0]-3,p[1]-3,6,6);});
+ectx.fillStyle='#8b949e';ectx.font='11px monospace';ectx.fillText('pose: WALKING · 17 keypoints @ 30fps',560,290);
+if(Math.random()<0.2){nf++;document.getElementById('ec-n').textContent=nf;}
+requestAnimationFrame(ecStep);}
+ecStep();
+
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js').catch(function(){});}</script>
 </body>
 </html>

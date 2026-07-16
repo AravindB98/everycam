@@ -305,3 +305,26 @@ If you use EveryCam, please cite it via [CITATION.cff](CITATION.cff).
 ## License
 
 [MIT](LICENSE) © 2026 Aravind Balaji
+
+---
+
+## 🧰 Tech Stack
+
+Python · privacy-first video processing (on-device redaction) · pose & action extraction · robot-learning-ready data formats
+
+## 🌍 Real-Life Applications
+
+- Scaling up training data for household and warehouse robots
+- Privacy-preserving activity datasets for embodied-AI research
+- Turning existing camera infrastructure into a data asset
+
+## 🤝 Contributing
+
+Contributions of every size are welcome!
+
+1. ⭐ **Star this repo** — it helps more people discover the project.
+2. 🍴 **Fork it** and create a feature branch (`git checkout -b feature/your-idea`).
+3. Commit your changes with clear messages.
+4. Open a Pull Request describing what you improved and why.
+
+Found a bug or have an idea? [Open an issue](https://github.com/AravindB98/everycam/issues). And if this project helped you, please **star ⭐ and fork 🍴** — it genuinely helps the project grow.
